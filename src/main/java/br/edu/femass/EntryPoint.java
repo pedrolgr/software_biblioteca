@@ -12,11 +12,11 @@ public class EntryPoint extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/CadastroLivro.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"));
         
         Scene scene = new Scene(root);
 
-        stage.setTitle("JavaFX and Maven");
+        stage.setTitle("Login Biblioteca");
         stage.setScene(scene);
         stage.show();
     }

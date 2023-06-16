@@ -42,6 +42,10 @@ public class Dao<E> {
         return q.getResultList();
     }
 
+    public List<E> buscar() {
+        return em.createQuery("From " + entity.getName()).getResultList();
+    }
+
     public E findById(Object id) {
         return em.find(entity, id);
     }

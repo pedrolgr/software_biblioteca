@@ -5,10 +5,13 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import br.edu.femass.dao.Dao;
 import br.edu.femass.dao.DaoCopia;
 import br.edu.femass.dao.DaoGenero;
 import br.edu.femass.dao.DaoLivro;
+import br.edu.femass.entities.Autor;
 import br.edu.femass.entities.Copia;
+import br.edu.femass.entities.Emprestimo;
 import br.edu.femass.entities.Genero;
 import br.edu.femass.entities.Livro;
 import javafx.collections.FXCollections;
@@ -28,6 +31,7 @@ public class LivroController implements Initializable{
     private DaoLivro dao = new DaoLivro(Livro.class);
     private DaoCopia daoCopia = new DaoCopia(Copia.class);
     private DaoGenero daoGenero = new DaoGenero(Genero.class);
+    private Dao<Autor> daoAutor = new Dao<>(Autor.class);
 
     @FXML
     private TextField TxtNome;
@@ -48,6 +52,9 @@ public class LivroController implements Initializable{
     private ComboBox<Genero> ComboGenero;
 
     @FXML
+    private ComboBox<Autor> ComboAutor;
+
+    @FXML
     private ListView<Copia> listaCopia;
 
     @FXML
@@ -59,15 +66,17 @@ public class LivroController implements Initializable{
                 TxtAno.getText().length() == 0 ||
                 TxtEdicao.getText().length() == 0 ||
                 TxtCopias.getText().length() == 0 ||
-                ComboGenero.getValue() == null) {
+                ComboGenero.getValue() == null ||
+                ComboAutor.getValue() == null) {
                 throw new IllegalArgumentException("Todos os campos são obrigatórios!");
             } else {
                 Integer ano = Integer.parseInt(TxtAno.getText());
                 Livro livro = new Livro(TxtNome.getText(), ano, TxtEdicao.getText(),
-                ComboGenero.getSelectionModel().getSelectedItem());
+                ComboGenero.getSelectionModel().getSelectedItem(), ComboAutor.getSelectionModel().getSelectedItem());
 
                 for(int i = 0; i < Integer.parseInt(TxtCopias.getText()); i++) {
                     Copia copia = new Copia(TxtNome.getText());
+                    if(i == 0) copia.setCopiaFixa(true);
                     daoCopia.create(copia);
 
                     livro.addCopia(copia);
@@ -102,6 +111,7 @@ public class LivroController implements Initializable{
             TxtEdicao.setText("");
             ComboGenero.getSelectionModel().select(null);
             TxtCopias.setText("");
+            ComboAutor.getSelectionModel().select(null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -116,6 +126,7 @@ public class LivroController implements Initializable{
         TxtEdicao.setText("");
         ComboGenero.getSelectionModel().select(null);
         TxtCopias.setText("");
+        ComboAutor.getSelectionModel().select(null);
     }
 
     @FXML
@@ -144,18 +155,23 @@ public class LivroController implements Initializable{
         Livro livro = listaLivro.getSelectionModel().getSelectedItem();
         if(livro == null) return;
         
-        List<Copia> copias = dao.buscarCopias(livro);
-        ObservableList<Copia> data = FXCollections.observableArrayList(copias);
+        ObservableList<Copia> data = FXCollections.observableArrayList(livro.getCopias());
         listaCopia.setItems(data);
-        // List<Livro> livros = dao.buscar();
-        // ObservableList<Livro> data = FXCollections.observableArrayList(livros);
-        // listaLivro.setItems(data);
     }
 
     public void exibirGeneros() {
         try {
             ObservableList<Genero> data = FXCollections.observableArrayList(daoGenero.buscar());
             ComboGenero.setItems(data);
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void exibirAutores() {
+        try {
+            ObservableList<Autor> data = FXCollections.observableArrayList(daoAutor.buscar());
+            ComboAutor.setItems(data);
         } catch(Exception ex) {
             ex.printStackTrace();
         }
@@ -170,6 +186,7 @@ public class LivroController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         exibirGeneros();
+        exibirAutores();
         preencherListaLivro();
     }
 }

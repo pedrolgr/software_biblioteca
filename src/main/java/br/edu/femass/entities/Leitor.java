@@ -32,9 +32,23 @@ public class Leitor {
     private Long id;
     private String nome;
     private String email;
+    private String telefone;
+
+    public Leitor(String nome, String email, String telefone) {
+        this.nome = nome;
+        this.email = email;
+        this.telefone = telefone;
+    }
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Telefone> telefones = new ArrayList<>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Copia> copias = new ArrayList<>();
+
+    public void addCopia(Copia copia) {
+        copias.add(copia);
+    }
 
     public void addTelefone(Telefone telefone) {
         telefones.add(telefone);
@@ -42,7 +56,7 @@ public class Leitor {
 
     @Override
     public String toString() {
-        return "Leitor [id=" + id + ", nome=" + nome + ", email=" + email + ", telefones=" + telefones + "]";
+        return getNome();
     }
 
     
