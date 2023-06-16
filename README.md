@@ -1,0 +1,3 @@
+# Doftware Biblioteca
+
+  O Software Biblioteca foi desenvolvido em Java utilizando JavaFX, JPA e Hibernate. Nesse programa fazemos o controle de empréstimos de livro para os leitores cadastrados, o bibliotecário também pode cadastrar livros, gêneros para livros, autores, leitores sendo aluno ou professores e realizar os empréstimos e devoluções dos livros. Cada leitor só pode pegar emprestado 5 livros e caso o leitor seja um aluno tem um prazo de 5 dias para entrega, caso seja professor tem o prazo de 30 dias. Todo esse código foi desenvolvido para a prova da disciplina Programação de Computadores III.
