@@ -78,6 +78,7 @@ public class LeitorController implements Initializable{
         TxtTelefone.setText("");
         TxtMatricula.setText("");
         TxtFormacao.setText("");
+        listaLeitor.getSelectionModel().clearSelection();
 
         preencherLista();
     }
@@ -94,6 +95,7 @@ public class LeitorController implements Initializable{
         TxtTelefone.setText("");
         TxtMatricula.setText("");
         TxtFormacao.setText("");
+        listaLeitor.getSelectionModel().clearSelection();
     }
 
     @FXML

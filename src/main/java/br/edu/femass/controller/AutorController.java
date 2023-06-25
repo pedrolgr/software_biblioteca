@@ -61,6 +61,7 @@ public class AutorController implements Initializable{
 
         TxtNome.setText("");
         TxtSobrenome.setText("");
+        listaAutor.getSelectionModel().clearSelection();
 
         preencherLista();
     }
@@ -86,6 +87,7 @@ public class AutorController implements Initializable{
     private void btnNovo(ActionEvent event) {
         TxtNome.setText("");
         TxtSobrenome.setText("");
+        listaAutor.getSelectionModel().clearSelection();
     }
 
     @FXML

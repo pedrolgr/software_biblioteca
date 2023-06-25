@@ -40,7 +40,7 @@ public class LivroConsultaController implements Initializable{
         Livro livro = listaLivro.getSelectionModel().getSelectedItem();
         if(livro == null) return;
         
-        ObservableList<Copia> data = FXCollections.observableArrayList(livro.getCopiasLivres());
+        ObservableList<Copia> data = FXCollections.observableArrayList(livro.getCopias());
         listaCopia.setItems(data);
     }
 

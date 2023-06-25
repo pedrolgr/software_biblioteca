@@ -78,6 +78,7 @@ public class LivroController implements Initializable{
                 for(int i = 0; i < Integer.parseInt(TxtCopias.getText()); i++) {
                     Copia copia = new Copia(TxtNome.getText());
                     if(i == 0) copia.setCopiaFixa(true);
+                    copia.setCopiaEmprestada(false);
                     daoCopia.create(copia);
 
                     livro.addCopia(copia);
@@ -109,6 +110,7 @@ public class LivroController implements Initializable{
         TxtEdicao.setText("");
         ComboGenero.getSelectionModel().select(null);
         TxtCopias.setText("");
+        listaLivro.getSelectionModel().clearSelection();
 
         preencherListaLivro();
     }

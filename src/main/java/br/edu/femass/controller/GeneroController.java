@@ -56,6 +56,7 @@ public class GeneroController implements Initializable {
         }
 
         TxtGenero.setText("");
+        listaGenero.getSelectionModel().clearSelection();
         preencherLista();
     }
 
@@ -78,6 +79,7 @@ public class GeneroController implements Initializable {
     @FXML
     private void btnNovo(ActionEvent event) {
         TxtGenero.setText("");
+        listaGenero.getSelectionModel().clearSelection();
     }
 
     @FXML

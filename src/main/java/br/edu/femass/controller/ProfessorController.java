@@ -77,6 +77,7 @@ public class ProfessorController implements Initializable{
         TxtEmail.setText("");
         TxtTelefone.setText("");
         TxtFormacao.setText("");
+        listaLeitor.getSelectionModel().clearSelection();
 
         preencherLista();
     }
@@ -106,6 +107,7 @@ public class ProfessorController implements Initializable{
         TxtEmail.setText("");
         TxtTelefone.setText("");
         TxtFormacao.setText("");
+        listaLeitor.getSelectionModel().clearSelection();
     }
 
     @FXML

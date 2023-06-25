@@ -93,6 +93,7 @@ public class AlunoController implements Initializable {
             TxtEmail.setText("");
             TxtTelefone.setText("");
             TxtMatricula.setText("");
+            listaLeitor.getSelectionModel().clearSelection();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -106,6 +107,7 @@ public class AlunoController implements Initializable {
         TxtEmail.setText("");
         TxtTelefone.setText("");
         TxtMatricula.setText("");
+        listaLeitor.getSelectionModel().clearSelection();
     }
 
     @FXML

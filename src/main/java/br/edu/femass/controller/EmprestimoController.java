@@ -70,6 +70,7 @@ public class EmprestimoController implements Initializable {
                                 Emprestimo emprestimo = new Emprestimo(dataAtual, dataAtual.plusDays(5), null, leitor,
                                         copia);
 
+                                daoCopia.update(copia);
                                 daoEmprestimo.create(emprestimo);
                             } else {
                                 throw new IllegalArgumentException("O aluno possui 5 empréstimos!");
@@ -123,6 +124,8 @@ public class EmprestimoController implements Initializable {
         preencherListaCopia();
         preencherListaEmprestimo();
         preencherListaEmprestimo();
+        listaCopia.getSelectionModel().clearSelection();
+        listaLivro.getSelectionModel().clearSelection();
     }
 
     @FXML
