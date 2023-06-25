@@ -29,8 +29,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import java.time.format.DateTimeFormatter;
 
-public class EmprestimoController implements Initializable{
-    
+public class EmprestimoController implements Initializable {
+
     private DaoLivro daoLivro = new DaoLivro(Livro.class);
     private DaoCopia daoCopia = new DaoCopia(Copia.class);
     private DaoLeitor daoLeitor = new DaoLeitor(Leitor.class);
@@ -45,52 +45,60 @@ public class EmprestimoController implements Initializable{
     @FXML
     private ListView<Livro> listaLivro;
 
-    @FXML ListView<Emprestimo> listaEmprestimo;
+    @FXML
+    ListView<Emprestimo> listaEmprestimo;
 
     @FXML
     private void btnEmprestimo(ActionEvent event) {
         Alert alerta = new Alert(AlertType.ERROR);
         LocalDate dataAtual = LocalDate.now();
         try {
-            if (ComboLeitor.getValue() == null ||
-            listaLivro.getSelectionModel().getSelectedItem() == null ||
-            listaCopia.getSelectionModel().getSelectedItem() == null) {
-                throw new IllegalArgumentException("Todos os campos são obrigatórios!");
-            } else {
-                Leitor leitor = ComboLeitor.getSelectionModel().getSelectedItem();
-                Copia copia = listaCopia.getSelectionModel().getSelectedItem();
-                if(!copia.isCopiaFixa()) {
-                    if(leitor instanceof Aluno){
-                        if(leitor.getCopias().size() < 5) {
-                            copia.setCopiaEmprestada(true);
-                            leitor.addCopia(copia);
-                            Emprestimo emprestimo = new Emprestimo(dataAtual, dataAtual.plusDays(5), null, leitor, copia);
-
-                            daoEmprestimo.create(emprestimo);
-                        } else {
-                            throw new IllegalArgumentException("O aluno possui 5 empréstimos!");
-                        }
-
-                    } else if(leitor instanceof Professor) {
-                        if(leitor.getCopias().size() < 30) {
-                            copia.setCopiaEmprestada(true);
-                            leitor.addCopia(copia);
-                            Emprestimo emprestimo = new Emprestimo(dataAtual, dataAtual.plusDays(30), null, leitor, copia);
-
-                            daoEmprestimo.create(emprestimo);
-                        } else {
-                            throw new IllegalArgumentException("O aluno possui 5 empréstimos!");
-                        }
-                    }
+                if (ComboLeitor.getValue() == null ||
+                        listaLivro.getSelectionModel().getSelectedItem() == null ||
+                        listaCopia.getSelectionModel().getSelectedItem() == null) {
+                    throw new IllegalArgumentException("Todos os campos são obrigatórios!");
                 } else {
-                    throw new IllegalArgumentException("Essa cópia não pode ser emprestada!");
+                    Leitor leitor = ComboLeitor.getSelectionModel().getSelectedItem();
+                    Copia copia = listaCopia.getSelectionModel().getSelectedItem();
+                    if (copia.isCopiaEmprestada()) 
+                        throw new IllegalArgumentException("Copia Indisponivel!");
+                    if (!copia.isCopiaFixa()) {
+                        if (leitor instanceof Aluno) {
+                            if (leitor.getCopias().size() < 5) {
+                                copia.setCopiaEmprestada(true);
+                                leitor.addCopia(copia);
+                                Emprestimo emprestimo = new Emprestimo(dataAtual, dataAtual.plusDays(5), null, leitor,
+                                        copia);
+
+                                daoEmprestimo.create(emprestimo);
+                            } else {
+                                throw new IllegalArgumentException("O aluno possui 5 empréstimos!");
+                            }
+
+                        } else if (leitor instanceof Professor) {
+                            if (leitor.getCopias().size() < 30) {
+                                copia.setCopiaEmprestada(true);
+                                leitor.addCopia(copia);
+                                Emprestimo emprestimo = new Emprestimo(dataAtual, dataAtual.plusDays(30), null, leitor,
+                                        copia);
+
+                                daoCopia.update(copia);
+                                daoEmprestimo.create(emprestimo);
+                            } else {
+                                throw new IllegalArgumentException("O aluno possui 5 empréstimos!");
+                            }
+                        }
+                    } else {
+                        throw new IllegalArgumentException("Essa cópia não pode ser emprestada!");
+                    }
                 }
-            }
+
         } catch (Exception e) {
             alerta.setTitle(e.getMessage());
             alerta.show();
         }
 
+        
         preencherListaLivro();
         preencherListaCopia();
         preencherListaEmprestimo();
@@ -99,54 +107,60 @@ public class EmprestimoController implements Initializable{
     @FXML
     private void btnDevolverEmprestimo(ActionEvent event) {
         Emprestimo emprestimo = listaEmprestimo.getSelectionModel().getSelectedItem();
-        if(emprestimo == null) return;
-        
+        Leitor leitor = emprestimo.getLeitor();
+
+        if (emprestimo == null)
+            return;
+
         LocalDate dataAtual = LocalDate.now();
         emprestimo.setDataEntrega(dataAtual);
         Copia copia = emprestimo.getCopia();
         copia.setCopiaEmprestada(false);
+        leitor.removeCopia(copia);
         daoCopia.update(copia);
         daoEmprestimo.update(emprestimo);
 
         preencherListaCopia();
         preencherListaEmprestimo();
+        preencherListaEmprestimo();
     }
 
     @FXML
-    private void listaEmprestimo_mouseClicked(MouseEvent event){
+    private void listaEmprestimo_mouseClicked(MouseEvent event) {
         preencherListaCopia();
     }
 
     @FXML
-    private void listaEmprestimo_keyPressed(KeyEvent event){
+    private void listaEmprestimo_keyPressed(KeyEvent event) {
         preencherListaCopia();
     }
 
     @FXML
-    private void listaLivro_mouseClicked(MouseEvent event){
+    private void listaLivro_mouseClicked(MouseEvent event) {
         preencherListaCopia();
     }
 
     @FXML
-    private void listaLivro_keyPressed(KeyEvent event){
+    private void listaLivro_keyPressed(KeyEvent event) {
         preencherListaCopia();
     }
 
     @FXML
-    private void listaCopia_mouseClicked(MouseEvent event){
+    private void listaCopia_mouseClicked(MouseEvent event) {
         preencherListaCopia();
     }
 
     @FXML
-    private void listaCopia_keyPressed(KeyEvent event){
+    private void listaCopia_keyPressed(KeyEvent event) {
         preencherListaCopia();
     }
 
     public void preencherListaCopia() {
         Livro livro = listaLivro.getSelectionModel().getSelectedItem();
-        if(livro == null) return;
-        
-        ObservableList<Copia> data = FXCollections.observableArrayList(livro.getCopiasLivres());
+        if (livro == null)
+            return;
+
+        ObservableList<Copia> data = FXCollections.observableArrayList(livro.getCopias());
         listaCopia.setItems(data);
     }
 
@@ -165,9 +179,9 @@ public class EmprestimoController implements Initializable{
     public void exibirLeitores() {
         try {
             ObservableList<Leitor> data = FXCollections.observableArrayList(
-                daoLeitor.buscar());
+                    daoLeitor.buscar());
             ComboLeitor.setItems(data);
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -175,9 +189,8 @@ public class EmprestimoController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         preencherListaLivro();
-        preencherListaCopia();
         preencherListaEmprestimo();
         exibirLeitores();
     }
-    
+
 }

@@ -62,7 +62,8 @@ public class LivroController implements Initializable{
         Alert alerta = new Alert(AlertType.ERROR);
 
         try {
-            if (TxtNome.getText().length() == 0 || 
+            if (listaLivro.getSelectionModel().getSelectedItem() == null) {
+                if (TxtNome.getText().length() == 0 || 
                 TxtAno.getText().length() == 0 ||
                 TxtEdicao.getText().length() == 0 ||
                 TxtCopias.getText().length() == 0 ||
@@ -85,10 +86,23 @@ public class LivroController implements Initializable{
                 dao.create(livro);
             }
             
+            } else {
+                Livro livro = listaLivro.getSelectionModel().getSelectedItem();
+
+                Integer ano = Integer.parseInt(TxtAno.getText());
+                livro.setNome(TxtNome.getText());
+                livro.setAno(ano);
+                livro.setEdicao(TxtEdicao.getText());
+                livro.setGenero(ComboGenero.getSelectionModel().getSelectedItem());
+                livro.setAutor(ComboAutor.getSelectionModel().getSelectedItem());
+
+                dao.update(livro);
+            }
         } catch (Exception e) {
             alerta.setTitle(e.getMessage());
             alerta.show();
         }
+            
 
         TxtNome.setText("");
         TxtAno.setText("");
@@ -127,6 +141,8 @@ public class LivroController implements Initializable{
         ComboGenero.getSelectionModel().select(null);
         TxtCopias.setText("");
         ComboAutor.getSelectionModel().select(null);
+
+        listaLivro.getSelectionModel().clearSelection();
     }
 
     @FXML
@@ -148,7 +164,9 @@ public class LivroController implements Initializable{
         TxtNome.setText(livro.getNome());
         TxtAno.setText(Integer.toString(livro.getAno()));
         TxtEdicao.setText(livro.getEdicao());
+        TxtCopias.setText(Integer.toString(livro.getCopias().size()));
         ComboGenero.getSelectionModel().select(livro.getGenero());
+        ComboAutor.getSelectionModel().select(livro.getAutor());
     }
 
     public void preencherListaCopia() {

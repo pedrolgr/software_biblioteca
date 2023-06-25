@@ -9,6 +9,7 @@ import br.edu.femass.dao.DaoLeitor;
 import br.edu.femass.entities.Professor;
 import br.edu.femass.entities.Autor;
 import br.edu.femass.entities.Leitor;
+import br.edu.femass.entities.Livro;
 import br.edu.femass.entities.Professor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,15 +47,27 @@ public class ProfessorController implements Initializable{
        Alert alerta = new Alert(AlertType.ERROR);
 
        try{
-            if (TxtNome.getText().length() == 0 ||
-            TxtEmail.getText().length() == 0 ||
-            TxtTelefone.getText().length() == 0) {
-                throw new IllegalArgumentException("Preencha os campos obrigatórios");
-            } else {
-                Professor professor = new Professor(TxtNome.getText(), TxtEmail.getText(),
-                TxtTelefone.getText(), TxtFormacao.getText());
-                dao.create(professor);
+            if (listaLeitor.getSelectionModel().getSelectedItem() == null) {
+                if (TxtNome.getText().length() == 0 ||
+                    TxtEmail.getText().length() == 0 ||
+                    TxtTelefone.getText().length() == 0) {
+                    throw new IllegalArgumentException("Preencha os campos obrigatórios");
+                } else {
+                    Professor professor = new Professor(TxtNome.getText(), TxtEmail.getText(),
+                    TxtTelefone.getText(), TxtFormacao.getText());
+                    dao.create(professor);
                 }
+            } else {
+                Professor professor = listaLeitor.getSelectionModel().getSelectedItem();
+
+                professor.setNome(TxtNome.getText());
+                professor.setEmail(TxtEmail.getText());
+                professor.setTelefone(TxtTelefone.getText());
+                professor.setFormacao(TxtFormacao.getText());
+
+                dao.update(professor);
+            }
+            
        } catch (Exception e) {
             alerta.setTitle(e.getMessage());
             alerta.show();

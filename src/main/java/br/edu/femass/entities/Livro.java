@@ -41,7 +41,7 @@ public class Livro {
     @OneToMany(cascade = CascadeType.MERGE)
     private List<Copia> copias = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Autor autor;
 
     public void addCopia(Copia copia) {

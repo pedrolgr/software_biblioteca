@@ -22,7 +22,7 @@ import javafx.scene.input.MouseEvent;
 
 public class GeneroController implements Initializable {
     private DaoGenero dao = new DaoGenero(Genero.class);
-    
+
     @FXML
     private TextField TxtGenero;
 
@@ -34,32 +34,41 @@ public class GeneroController implements Initializable {
         Alert alerta = new Alert(AlertType.ERROR);
 
         try {
-            if (TxtGenero.getText().length() == 0) {
-                throw new IllegalArgumentException("Todos os campos são obrigatórios!");
-            } else {
-                Genero genero = new Genero(TxtGenero.getText());
-                dao.create(genero);
+            if (listaGenero.getSelectionModel().getSelectedItem() == null) {
+                if (TxtGenero.getText().length() == 0) {
+                    throw new IllegalArgumentException("Todos os campos são obrigatórios!");
+                } else {
+                    Genero genero = new Genero(TxtGenero.getText());
+                    dao.create(genero);
+                }
 
-                preencherLista();
+            } else {
+                Genero genero = listaGenero.getSelectionModel().getSelectedItem();
+
+                genero.setGenero(TxtGenero.getText());
+
+                dao.update(genero);
             }
-            
+
         } catch (Exception e) {
             alerta.setTitle(e.getMessage());
             alerta.show();
         }
 
         TxtGenero.setText("");
+        preencherLista();
     }
 
     @FXML
     private void btnExcluir(ActionEvent event) {
         Genero genero = listaGenero.getSelectionModel().getSelectedItem();
 
-        if (genero == null) return;
+        if (genero == null)
+            return;
         try {
             dao.delete(genero.getId());
             TxtGenero.setText("");
-        }  catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -72,28 +81,28 @@ public class GeneroController implements Initializable {
     }
 
     @FXML
-    private void listaAutor_mouseClicked(MouseEvent event){
+    private void listaAutor_mouseClicked(MouseEvent event) {
         exibirDados();
     }
 
     @FXML
-    private void listaAutor_keyPressed(KeyEvent event){
+    private void listaAutor_keyPressed(KeyEvent event) {
         exibirDados();
     }
 
     private void exibirDados() {
         Genero genero = listaGenero.getSelectionModel().getSelectedItem();
-        if(genero == null) return;
-        
+        if (genero == null)
+            return;
+
         TxtGenero.setText(genero.getGenero());
     }
 
-    private void preencherLista(){
+    private void preencherLista() {
         List<Genero> generos = dao.buscar();
         ObservableList<Genero> data = FXCollections.observableArrayList(generos);
         listaGenero.setItems(data);
     }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

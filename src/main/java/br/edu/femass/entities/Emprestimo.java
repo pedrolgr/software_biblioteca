@@ -36,7 +36,7 @@ public class Emprestimo{
     private LocalDate dataEntrega;
     @ManyToOne(cascade = CascadeType.MERGE)
     private Leitor leitor;
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Copia copia;
 
     public Emprestimo(LocalDate data, LocalDate dataPrevista, 

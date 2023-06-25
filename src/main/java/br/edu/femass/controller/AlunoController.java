@@ -22,7 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class AlunoController implements Initializable{
+public class AlunoController implements Initializable {
 
     private Dao<Aluno> dao = new Dao<>(Aluno.class);
 
@@ -43,19 +43,31 @@ public class AlunoController implements Initializable{
 
     @FXML
     private void btnSalvar(ActionEvent event) {
-       Alert alerta = new Alert(AlertType.ERROR);
+        Alert alerta = new Alert(AlertType.ERROR);
 
-       try{
-            if (TxtNome.getText().length() == 0 ||
-            TxtEmail.getText().length() == 0 ||
-            TxtTelefone.getText().length() == 0) {
-                throw new IllegalArgumentException("Preencha os campos obrigatórios");
-            } else {
-                Aluno aluno = new Aluno(TxtNome.getText(), TxtEmail.getText(),
-                TxtTelefone.getText(), TxtMatricula.getText());
-                dao.create(aluno);
+        try {
+            if (listaLeitor.getSelectionModel().getSelectedItem() == null) {
+                if (TxtNome.getText().length() == 0 ||
+                        TxtEmail.getText().length() == 0 ||
+                        TxtTelefone.getText().length() == 0) {
+                    throw new IllegalArgumentException("Preencha os campos obrigatórios");
+                } else {
+                    Aluno aluno = new Aluno(TxtNome.getText(), TxtEmail.getText(),
+                            TxtTelefone.getText(), TxtMatricula.getText());
+                    dao.create(aluno);
                 }
-       } catch (Exception e) {
+            } else {
+                Aluno aluno = listaLeitor.getSelectionModel().getSelectedItem();
+
+                aluno.setNome(TxtNome.getText());
+                aluno.setEmail(TxtEmail.getText());
+                aluno.setTelefone(TxtTelefone.getText());
+                aluno.setMatricula(TxtMatricula.getText());
+
+                dao.update(aluno);
+            }
+
+        } catch (Exception e) {
             alerta.setTitle(e.getMessage());
             alerta.show();
         }
@@ -73,17 +85,18 @@ public class AlunoController implements Initializable{
         Aluno aluno = listaLeitor.getSelectionModel().getSelectedItem();
         Alert alerta = new Alert(AlertType.ERROR);
 
-        if(aluno == null) return;
+        if (aluno == null)
+            return;
         try {
             dao.delete(aluno.getId());
             TxtNome.setText("");
             TxtEmail.setText("");
             TxtTelefone.setText("");
             TxtMatricula.setText("");
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         preencherLista();
     }
 
@@ -96,18 +109,19 @@ public class AlunoController implements Initializable{
     }
 
     @FXML
-    private void listaLeitor_mouseClicked(MouseEvent event){
+    private void listaLeitor_mouseClicked(MouseEvent event) {
         exibirDados();
     }
 
     @FXML
-    private void listaLeitor_keyPressed(KeyEvent event){
+    private void listaLeitor_keyPressed(KeyEvent event) {
         exibirDados();
     }
 
     public void exibirDados() {
         Aluno aluno = listaLeitor.getSelectionModel().getSelectedItem();
-        if (aluno == null) return;
+        if (aluno == null)
+            return;
 
         TxtNome.setText(aluno.getNome());
         TxtEmail.setText(aluno.getEmail());

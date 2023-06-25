@@ -54,6 +54,10 @@ public class Leitor {
         telefones.add(telefone);
     }
 
+    public void removeCopia(Copia copia) {
+        this.copias.remove(copia);
+    }
+
     @Override
     public String toString() {
         return getNome();

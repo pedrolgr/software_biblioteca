@@ -52,7 +52,7 @@ public class Copia{
     @Override
     public String toString() {
         if(copiaFixa) return Long.toString(getId()) + " *";
-
+        if (isCopiaEmprestada()) return Long.toString(getId()) + " [EMPRESTADA]";
         return Long.toString(getId());
     }
 }

@@ -16,7 +16,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class LoginController implements Initializable{
+public class LoginController implements Initializable {
 
     @FXML
     private TextField TxtUsuario;
@@ -30,11 +30,11 @@ public class LoginController implements Initializable{
 
         try {
             if (TxtUsuario.getText().length() == 0 ||
-            TxtSenha.getText().length() == 0) {
+                    TxtSenha.getText().length() == 0) {
                 throw new IllegalArgumentException("Todos os campos são obrigatórios!");
             } else {
                 if (TxtUsuario.getText().equals("bibliotecario") &&
-                TxtSenha.getText().equals("bibliotecario123")) {
+                        TxtSenha.getText().equals("bibliotecario123")) {
                     Parent root = FXMLLoader.load(LoginController.class.getResource("/fxml/Opcoes.fxml"));
 
                     try {
@@ -46,6 +46,20 @@ public class LoginController implements Initializable{
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                } else if (TxtUsuario.getText().equals("leitor") &&
+                        TxtSenha.getText().equals("leitor123")) {
+                    Parent root = FXMLLoader.load(LoginController.class.getResource("/fxml/ConsultaLivro.fxml"));
+
+                    try {
+                        Scene s = new Scene(root);
+                        Stage st = new Stage();
+                        st.setTitle("Cadastro Paciente");
+                        st.setScene(s);
+                        st.show();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 } else {
                     try {
                         throw new IllegalArgumentException("Usuário e senhas incorretos!");
@@ -67,20 +81,17 @@ public class LoginController implements Initializable{
         Alert alerta = new Alert(AlertType.ERROR);
 
         try {
-            
-        throw new IllegalArgumentException("Vai ter que lembrar, não tem como recuperar :(");
+
+            throw new IllegalArgumentException("Vai ter que lembrar, não tem como recuperar :(");
         } catch (Exception e) {
             alerta.setTitle(e.getMessage());
             alerta.show();
         }
     }
 
-    
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
     }
-    
-    
+
 }

@@ -37,14 +37,22 @@ public class AutorController implements Initializable{
         Alert alerta = new Alert(AlertType.ERROR);
 
         try {
-            if (TxtNome.getText().length() == 0 || TxtSobrenome.getText().length() == 0) {
+            if (listaAutor.getSelectionModel().getSelectedItem() == null) {
+                if (TxtNome.getText().length() == 0 || TxtSobrenome.getText().length() == 0) {
                 throw new IllegalArgumentException("Todos os campos são obrigatórios!");
             } else {
                 Autor autor = new Autor(TxtNome.getText(), TxtSobrenome.getText());
-                dao.create(autor);
-
-                preencherLista();
+                dao.create(autor); 
             }
+            } else {
+                Autor autor = listaAutor.getSelectionModel().getSelectedItem();
+
+                autor.setNome(TxtNome.getText());
+                autor.setSobreNome(TxtSobrenome.getText());
+
+                dao.update(autor);
+            }
+            
             
         } catch (Exception e) {
             alerta.setTitle(e.getMessage());
@@ -53,6 +61,8 @@ public class AutorController implements Initializable{
 
         TxtNome.setText("");
         TxtSobrenome.setText("");
+
+        preencherLista();
     }
 
     @FXML
