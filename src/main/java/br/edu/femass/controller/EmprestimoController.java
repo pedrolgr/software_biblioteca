@@ -99,7 +99,10 @@ public class EmprestimoController implements Initializable {
             alerta.show();
         }
 
-        
+        ComboLeitor.valueProperty().set(null);
+        listaCopia.getItems().clear();
+        listaLivro.getSelectionModel().clearSelection();
+        listaEmprestimo.getSelectionModel().clearSelection();
         preencherListaLivro();
         preencherListaCopia();
         preencherListaEmprestimo();
@@ -121,11 +124,13 @@ public class EmprestimoController implements Initializable {
         daoCopia.update(copia);
         daoEmprestimo.update(emprestimo);
 
-        preencherListaCopia();
-        preencherListaEmprestimo();
-        preencherListaEmprestimo();
+        
         listaCopia.getSelectionModel().clearSelection();
         listaLivro.getSelectionModel().clearSelection();
+        ComboLeitor.valueProperty().set(null);
+        listaEmprestimo.getSelectionModel().clearSelection();
+        preencherListaCopia();
+        preencherListaEmprestimo();
     }
 
     @FXML
